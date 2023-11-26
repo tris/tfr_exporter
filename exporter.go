@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -29,16 +30,13 @@ func init() {
 }
 
 func scrapeHandler(w http.ResponseWriter, r *http.Request) {
-	latitude := r.URL.Query().Get("lat")
-	if latitude == "" {
-		http.Error(w, "Missing required parameter: lat", http.StatusBadRequest)
+	point := r.URL.Query().Get("point")
+	if point == "" {
+		http.Error(w, "Missing required parameter: point", http.StatusBadRequest)
 		return
 	}
-	longitude := r.URL.Query().Get("long")
-	if longitude == "" {
-		http.Error(w, "Missing required parameter: long", http.StatusBadRequest)
-		return
-	}
+	latlong := strings.SplitN(point, ",", 2)
+	latitude, longitude := latlong[0], latlong[1]
 
 	// Fetch current advisories from Aloft
 	// API docs: https://api.aloft.ai/v1/docs
