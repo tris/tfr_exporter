@@ -54,7 +54,7 @@ type Detail struct {
 // Distance represents the distance field in the Advisory struct
 type Distance struct {
 	Unit  string  `json:"unit"`
-	Value int     `json:"value"`
+	Value float64 `json:"value"`
 	Lat   float64 `json:"lat"`
 	Long  float64 `json:"long"`
 }
